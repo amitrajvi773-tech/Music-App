@@ -20,7 +20,7 @@ public class Playlist {
     @ManyToMany
      @JoinTable(name="playlist_song",
      joinColumns=@JoinColumn(name="playlist_id"),
-     inverseJoinColumns =@JoinColumn(name="songs_id"))
+     inverseJoinColumns =@JoinColumn(name="song_id"))
     List<Song> songs=new ArrayList<>();
 
     @ManyToOne

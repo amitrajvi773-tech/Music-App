@@ -26,7 +26,7 @@ public class Song {
     private List<Playlist> playlists=new ArrayList<>();
 
     @OneToMany(mappedBy = "song")
-    private List<Favorite> songfavorites = new ArrayList<>();
+    private List<Favorite> songFavorites = new ArrayList<>();
 
 
 
