@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class SongController {
     @GetMapping("/allsong")
     public ResponseEntity<?> getAllSong(){
-        
+
     }
 }
