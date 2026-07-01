@@ -37,5 +37,13 @@ public class PlaylistService {
     public Playlist findByname(String name){
       return   playlistRepository.findByName(name);
     }
+
+    public void removeSongFromPlaylist(Long playlistId, Long songId) {
+playlistRepository.delete(playlistId,songId);
     }
+
+    public void addSongToPlaylist(Long playlistId, Long songId) {
+playlistRepository.save(playlistId,songId);
+    }
+}
 

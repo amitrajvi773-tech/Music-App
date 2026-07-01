@@ -34,16 +34,33 @@ public class PlaylistController {
 
     @PostMapping("addPlaylist")
     public ResponseEntity<Playlist> addPlaylist(@RequestBody Playlist playlist){
-       Playlist play= playlistService.savePlaylist(playlist);
-       return ResponseEntity.ok().body(play);
+        Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
+        String playlistname=authentication.getName();
+
+       Playlist saved= playlistService.savePlaylist(playlist,playlistname);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
-    @DeleteMapping("playlist/{myid}")
+    @PostMapping("/{playlistId}/songs/{songId}")
+    public ResponseEntity<?> addSongInPlaylist(  @PathVariable Long playlistId, @PathVariable Long songId){
+     playlistService.addSongToPlaylist(playlistId,songId);
+     return ResponseEntity.ok("song add succesfully");
+    }
+
+    @DeleteMapping("/playlists/{myid}")
     public void deletePl(@PathVariable long myid){
         playlistService.deletePlaylist(myid);
     }
 
-    @PutMapping("update/{myid}")
+    @DeleteMapping("/{playlistid}/song/{songid}")
+    public ResponseEntity<?> removeSongInPlaylist(@PathVariable Long playlistId, @PathVariable Long songId){
+        playlistService.removeSongFromPlaylist(playlistId, songId);
+        return ResponseEntity.noContent().build();
+    }
+
+
+
+    @PutMapping("/playlists/{myid}")
     public ResponseEntity<Playlist> update(@RequestBody Playlist playlist, @PathVariable long myid){
        Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
        Playlist pl=playlistService.getById(myid);
