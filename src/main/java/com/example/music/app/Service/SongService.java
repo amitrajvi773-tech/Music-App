@@ -2,9 +2,9 @@ package com.example.music.app.Service;
 
 import com.example.music.app.Entity.Song;
 import com.example.music.app.Repository.SongRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,16 +20,18 @@ public class SongService {
     }
 
 
-    public Song findSongById(long myid) {
-
-        return   songRepository.findById(myid);
+    public Song findSongById(long id) {
+        return songRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Song not found"));
     }
 
     public void deleteSong(long id){
+
         songRepository.deleteById(id);
     }
 
     public Song saveSong(Song song) {
+
         return songRepository.save(song);
     }
 
