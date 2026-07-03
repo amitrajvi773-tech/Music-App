@@ -1,15 +1,14 @@
 package com.example.music.app.Service;
 
 import com.example.music.app.Entity.Playlist;
+import com.example.music.app.Entity.Song;
+import com.example.music.app.Entity.User;
 import com.example.music.app.Repository.PlaylistRepository;
-import jakarta.persistence.EntityNotFoundException;
+import com.example.music.app.Repository.SongRepository;
+import com.example.music.app.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -18,6 +17,12 @@ public class PlaylistService {
     @Autowired
     private PlaylistRepository playlistRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private SongRepository songRepository;
+
     public List<Playlist> getAllPlaylist(){
        return playlistRepository.findAll();
     }
@@ -25,25 +30,59 @@ public class PlaylistService {
     public Playlist getById(long myid){
         return playlistRepository.findById(myid).orElseThrow(()-> new UsernameNotFoundException("Playlist not found"));
     }
-    public Playlist savePlaylist(Playlist playlist){
+
+    public Playlist saveNewPlaylist(Playlist playlist, String username){
+        User user=userRepository.findByUsername(username);
+        playlist.setUser(user);
         return playlistRepository.save(playlist);
     }
 
-    public void deletePlaylist(long id){
-        playlistRepository.deleteById(id);
+    public Playlist savePlaylist(Playlist playlist,String username){
+        if(!playlist.getUser().getUsername().equals(username)){
+            throw new UsernameNotFoundException("user not is not valid ");
+        }
+        return playlistRepository.save(playlist);
+
+    }
+
+
+    public void deletePlaylist(long id,String username){
+ Playlist playlist=playlistRepository.findById(id).orElseThrow(()->new UsernameNotFoundException("playlist not found"));
+ if(!playlist.getUser().getUsername().equals(username)){
+     throw new UsernameNotFoundException("username not found ");
+ }
+        playlistRepository.deleteById(playlist.getId());
     }
 
 
     public Playlist findByname(String name){
-      return   playlistRepository.findByName(name);
+
+        return   playlistRepository.findByName(name);
     }
 
-    public void removeSongFromPlaylist(Long playlistId, Long songId) {
-playlistRepository.delete(playlistId,songId);
+    public void removeSongFromPlaylist(Long playlistId, Long songId,String username) {
+        Playlist playlist=playlistRepository.findById(playlistId).orElseThrow(()-> new EntityNotFoundException("Playlist not found"));
+        if(!playlist.getUser().getUsername().equals(username)){
+            throw new UsernameNotFoundException("username not found ");
+        }
+        Song song=songRepository.findById(songId).orElseThrow(()-> new  UsernameNotFoundException("song not found "));
+
+        playlist.getSongs().remove(song);
+        playlistRepository.save(playlist);
     }
 
-    public void addSongToPlaylist(Long playlistId, Long songId) {
-playlistRepository.save(playlistId,songId);
+    public void addSongToPlaylist(Long playlistId, Long songId, String username) {
+        Playlist playlist=playlistRepository.findById(playlistId).orElseThrow(()-> new EntityNotFoundException("Playlist not found"));
+        if(!playlist.getUser().getUsername().equals(username)){
+            throw new UsernameNotFoundException("username not found ");
+        }
+        Song song=songRepository.findById(songId).orElseThrow(()-> new UsernameNotFoundException(" Song not found "));
+        if (playlist.getSongs().contains(song)) {
+            throw new IllegalArgumentException("Song already exists in playlist");
+        }
+        playlist.getSongs().add(song);
+        playlistRepository.save(playlist);
+
     }
 }
 
