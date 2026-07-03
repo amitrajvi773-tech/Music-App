@@ -6,6 +6,7 @@ import com.example.music.app.Entity.User;
 import com.example.music.app.Repository.PlaylistRepository;
 import com.example.music.app.Repository.SongRepository;
 import com.example.music.app.Repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;

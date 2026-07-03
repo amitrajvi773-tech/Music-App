@@ -1,10 +1,51 @@
 package com.example.music.app.Controller;
 
+import com.example.music.app.Entity.Song;
+import com.example.music.app.Entity.User;
+import com.example.music.app.Repository.FavoriteRepository;
+import com.example.music.app.Repository.SongRepository;
+import com.example.music.app.Service.FavoriteService;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class FavoriteController {
 
+ @Autowired
+ private SongRepository songRepository;
+
+ @Autowired
+ private FavoriteService favoriteService;
+ @PostMapping("/{songid}")
+  public ResponseEntity<?> addFavorite(long id){
+     Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+     String username=authentication.getName();
+     Song song=songRepository.findById(id).orElseThrow(()->new EntityNotFoundException("song not in favorite "));
+     favoriteService.songFavorites(song,username);
+     return ResponseEntity.ok("favoruote song");
+ }
+
+ @GetMapping
+    public ResponseEntity<?> getFavorite(){
+     Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+     String username=authentication.getName();
+     return ResponseEntity.ok(favoriteService.getFavorites(username));
+ }
+
+ @DeleteMapping("/{songid}")
+    public ResponseEntity<?> deletefavorite(long songid){
+     Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
+     String username= authentication.getName();
+     Song song=
+     favoriteService.deleteFavorite(songid,username);
+     return ResponseEntity.noContent().build();
+ }
 }
