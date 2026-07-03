@@ -1,5 +1,6 @@
 package com.example.music.app.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,7 @@ public class Song {
     private List<Playlist> playlists=new ArrayList<>();
 
     @OneToMany(mappedBy = "song")
+    @JsonIgnore
     private List<Favorite> songFavorites = new ArrayList<>();
 
 

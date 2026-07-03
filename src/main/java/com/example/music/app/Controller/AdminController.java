@@ -19,7 +19,7 @@ public class AdminController {
     @Autowired
     private SongService songService;
 
-    @PostMapping("/admin/song")
+    @PostMapping("/song")
      public ResponseEntity<Song> addSong(@RequestBody Song song) {
 
      Song saved = songService.saveSong(song);

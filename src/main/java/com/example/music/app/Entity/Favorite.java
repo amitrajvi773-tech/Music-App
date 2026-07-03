@@ -1,5 +1,6 @@
 package com.example.music.app.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,8 @@ public class Favorite {
 
    @ManyToOne
     @JoinColumn(name = "user_id" )
-    private User user;
+   @JsonIgnore
+   private User user;
 
    @ManyToOne
     @JoinColumn(name="song_id")

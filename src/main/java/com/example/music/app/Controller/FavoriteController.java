@@ -28,7 +28,7 @@ public class FavoriteController {
      String username=authentication.getName();
      Song song=songRepository.findById(songid).orElseThrow(()->new EntityNotFoundException("song not in favorite "));
      favoriteService.songFavorites(song,username);
-     return ResponseEntity.ok("favoruote song");
+     return ResponseEntity.ok("favoruote song added");
  }
 
  @GetMapping

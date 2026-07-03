@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/songs")
 public class SongController {
     @Autowired
     private SongService songService;

@@ -13,11 +13,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/playlists")
 public class PlaylistController {
     @Autowired
     private PlaylistService playlistService;
 
-    @GetMapping("/playlists")
+    @GetMapping
     public List<Playlist> getPlaylists(){
 
         List<Playlist>  playlist=playlistService.getAllPlaylist();
@@ -51,7 +52,7 @@ public class PlaylistController {
      return ResponseEntity.ok("song add succesfully");
     }
 
-    @DeleteMapping("/playlists/{myid}")
+    @DeleteMapping("/playlist/{myid}")
     public ResponseEntity<?> deletePl(@PathVariable long myid){
 
         Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
