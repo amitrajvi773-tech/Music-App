@@ -16,15 +16,16 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SpringSecurity {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception {
-        return http.authorizeHttpRequests(auth -> auth.
-                        requestMatchers("/public/", "/public/**").permitAll().
-                        requestMatchers("/user/", "/user/**").authenticated().
-                        requestMatchers("/Playlist/**").authenticated().
-                        requestMatchers("/admin/**").hasRole("ADMIN").
-                        anyRequest().permitAll()).
-                        httpBasic(Customizer.withDefaults()).
-                        csrf(AbstractHttpConfigurer::disable).
-                        build();
+        return http.authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/public/**").permitAll()
+                        .requestMatchers("/user/**").authenticated()
+                        .requestMatchers("/playlists/**").authenticated()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .anyRequest().permitAll()
+                )
+                .httpBasic(Customizer.withDefaults())
+                .csrf(AbstractHttpConfigurer::disable)
+                .build();
     }
 
 

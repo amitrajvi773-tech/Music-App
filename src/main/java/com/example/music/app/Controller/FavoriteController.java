@@ -26,7 +26,7 @@ public class FavoriteController {
   public ResponseEntity<?> addFavorite(@PathVariable long songid){
      Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
      String username=authentication.getName();
-     Song song=songRepository.findById(id).orElseThrow(()->new EntityNotFoundException("song not in favorite "));
+     Song song=songRepository.findById(songid).orElseThrow(()->new EntityNotFoundException("song not in favorite "));
      favoriteService.songFavorites(song,username);
      return ResponseEntity.ok("favoruote song");
  }
