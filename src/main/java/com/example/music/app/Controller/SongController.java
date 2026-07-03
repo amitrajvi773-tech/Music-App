@@ -43,4 +43,9 @@ public class SongController {
         existing.setArtist(song.getArtist());
         return songService.saveSong(existing);
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Song>> searchSong(@RequestParam(required = false) String title,@RequestParam(required = false) String artist){
+        return ResponseEntity.ok(songService.searchSongs(title,artist));
+    }
 }

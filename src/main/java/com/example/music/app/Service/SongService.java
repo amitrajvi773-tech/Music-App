@@ -35,4 +35,16 @@ public class SongService {
         return songRepository.save(song);
     }
 
+    public List<Song> searchSongs(String title, String artist) {
+    if(title != null && artist != null){
+     return songRepository.findByTitleContainingIgnoreCaseAndArtistContainingIgnoreCase(title,artist);
+     }
+     if(title!=null){
+      return songRepository.findByTitleContainingIgnoreCase(title);
+     }
+     if(artist!=null){
+         return songRepository.findByArtistContainingIgnoreCase(artist);
+     }
+     return songRepository.findAll();
+    }
 }

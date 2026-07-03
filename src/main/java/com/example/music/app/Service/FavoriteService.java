@@ -16,11 +16,21 @@ public class FavoriteService {
     private UserRepository userRepository;
 @Autowired
 private FavoriteRepository favoriteRepository;
+
     public void songFavorites(Song song, String username) {
         User user=userRepository.findByUsername(username);
-        Favorite favorite=new Favorite();
-        favorite.setSong(song);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+
+        Favorite existing = favoriteRepository.findByUserAndSong(user, song);
+        if ( existing!= null) {
+            throw new IllegalArgumentException("Song already in favorites");
+        }
+        Favorite favorite = new Favorite();
         favorite.setUser(user);
+        favorite.setSong(song);
+
         favoriteRepository.save(favorite);
 
     }
@@ -28,12 +38,24 @@ private FavoriteRepository favoriteRepository;
 
     public List<Favorite> getFavorites(String username) {
         User user=userRepository.findByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
         List<Favorite> liked=user.getFavorites();
         return liked;
 
     }
 
-    public void deleteFavorite(long songid, String username) {
+    public void deleteFavorite(Song song, String username) {
+     User user=userRepository.findByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+     Favorite favorite=favoriteRepository.findByUserAndSong(user,song);
+        if (favorite == null) {
+            throw new EntityNotFoundException("Favorite not found");
+        }
 
+        favoriteRepository.delete(favorite);
     }
 }

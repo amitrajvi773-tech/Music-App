@@ -11,12 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/favorites")
 public class FavoriteController {
 
  @Autowired
@@ -25,7 +23,7 @@ public class FavoriteController {
  @Autowired
  private FavoriteService favoriteService;
  @PostMapping("/{songid}")
-  public ResponseEntity<?> addFavorite(long id){
+  public ResponseEntity<?> addFavorite(@PathVariable long songid){
      Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
      String username=authentication.getName();
      Song song=songRepository.findById(id).orElseThrow(()->new EntityNotFoundException("song not in favorite "));
@@ -41,11 +39,11 @@ public class FavoriteController {
  }
 
  @DeleteMapping("/{songid}")
-    public ResponseEntity<?> deletefavorite(long songid){
+    public ResponseEntity<?> deletefavorite(@PathVariable long songid){
      Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
      String username= authentication.getName();
-     Song song=
-     favoriteService.deleteFavorite(songid,username);
+     Song song=songRepository.findById(songid).orElseThrow(()-> new EntityNotFoundException("songid not found"));
+     favoriteService.deleteFavorite(song,username);
      return ResponseEntity.noContent().build();
  }
 }
