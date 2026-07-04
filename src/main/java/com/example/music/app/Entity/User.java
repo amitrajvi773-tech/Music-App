@@ -2,6 +2,8 @@ package com.example.music.app.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,10 +18,15 @@ public class User {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long id;
 
+    @NotBlank
     @Column(unique = true)
     private String username;
 
+    @Email
+    @NotBlank
     private String email;
+
+    @NotBlank
     private String password;
 
     @ElementCollection(fetch = FetchType.EAGER)

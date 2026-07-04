@@ -4,6 +4,7 @@ import com.example.music.app.Entity.Song;
 import com.example.music.app.Entity.User;
 import com.example.music.app.Service.SongService;
 import com.example.music.app.Service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,7 @@ public class AdminController {
     private SongService songService;
 
     @PostMapping("/song")
-     public ResponseEntity<Song> addSong(@RequestBody Song song) {
+     public ResponseEntity<Song> addSong(@Valid  @RequestBody Song song) {
 
      Song saved = songService.saveSong(song);
 

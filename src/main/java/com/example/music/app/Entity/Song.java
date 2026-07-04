@@ -2,6 +2,7 @@ package com.example.music.app.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,9 +17,11 @@ public class Song {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  long id;
 
+    @NotBlank
     @Column(unique = true)
     private String title;
 
+    @NotBlank
     private String artist;
     private String album;
     private int duration;

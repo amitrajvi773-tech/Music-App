@@ -6,6 +6,7 @@ import com.example.music.app.Repository.FavoriteRepository;
 import com.example.music.app.Repository.SongRepository;
 import com.example.music.app.Service.FavoriteService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class FavoriteController {
  @Autowired
  private FavoriteService favoriteService;
  @PostMapping("/{songid}")
-  public ResponseEntity<?> addFavorite(@PathVariable long songid){
+  public ResponseEntity<?> addFavorite(@Valid @PathVariable long songid){
      Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
      String username=authentication.getName();
      Song song=songRepository.findById(songid).orElseThrow(()->new EntityNotFoundException("song not in favorite "));

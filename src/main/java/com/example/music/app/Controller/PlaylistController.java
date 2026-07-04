@@ -3,6 +3,7 @@ package com.example.music.app.Controller;
 import com.example.music.app.Entity.Playlist;
 import com.example.music.app.Service.PlaylistService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +37,7 @@ public class PlaylistController {
     }
 
     @PostMapping("addPlaylist")
-    public ResponseEntity<Playlist> addPlaylist(@RequestBody Playlist playlist){
+    public ResponseEntity<Playlist> addPlaylist(@Valid @RequestBody Playlist playlist){
         Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
         String username=authentication.getName();
 
@@ -45,7 +46,7 @@ public class PlaylistController {
     }
 
     @PostMapping("/{playlistId}/songs/{songId}")
-    public ResponseEntity<?> addSongInPlaylist(  @PathVariable Long playlistId, @PathVariable Long songId){
+    public ResponseEntity<?> addSongInPlaylist(@Valid  @PathVariable Long playlistId, @PathVariable Long songId){
         Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
         String username=authentication.getName();
      playlistService.addSongToPlaylist(playlistId,songId,username);
