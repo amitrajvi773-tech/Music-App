@@ -1,8 +1,10 @@
 package com.example.music.app.Controller;
 
+import com.example.music.app.DTO.SongResponseDTO;
 import com.example.music.app.Entity.Song;
 import com.example.music.app.Service.SongService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +26,8 @@ public class SongController {
     }
 
     @GetMapping("/song/{id}")
-    public ResponseEntity<Song> getSong(@PathVariable Long id) {
-        Song song = songService.findSongById(id);
+    public ResponseEntity<SongResponseDTO> getSong( @PathVariable Long id) {
+        SongResponseDTO song = songService.findSongById(id);
         return ResponseEntity.ok(song);
     }
 
@@ -37,7 +39,7 @@ public class SongController {
 
     @PutMapping("song/{myid}")
     public Song update(@RequestBody Song song,@PathVariable long myid){
-        Song existing=songService.findSongById(myid);
+        Song existing=songService.updatedSave(myid);
 
         existing.setTitle(song.getTitle());
         existing.setAlbum(song.getAlbum());

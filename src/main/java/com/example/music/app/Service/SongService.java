@@ -1,5 +1,6 @@
 package com.example.music.app.Service;
 
+import com.example.music.app.DTO.SongResponseDTO;
 import com.example.music.app.Entity.Song;
 import com.example.music.app.Repository.SongRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -20,9 +21,21 @@ public class SongService {
     }
 
 
-    public Song findSongById(long id) {
-        return songRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Song not found"));
+    public SongResponseDTO findSongById(long id) {
+        Song song= songRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("entity not found "));
+        SongResponseDTO dto = new SongResponseDTO();
+        dto.setId(song.getId());
+        dto.setTitle(song.getTitle());
+        dto.setArtist(song.getArtist());
+        dto.setAlbum(song.getAlbum());
+        dto.setDuration(song.getDuration());
+
+        return dto;
+    }
+
+    public Song updatedSave(long id){
+        Song song=songRepository.findById(id).orElseThrow(()->new EntityNotFoundException("entity not found "));
+        return songRepository.save(song);
     }
 
     public void deleteSong(long id){

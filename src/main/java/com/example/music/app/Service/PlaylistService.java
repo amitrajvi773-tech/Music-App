@@ -1,5 +1,6 @@
 package com.example.music.app.Service;
 
+import com.example.music.app.DTO.PlaylistResponseDTO;
 import com.example.music.app.Entity.Playlist;
 import com.example.music.app.Entity.Song;
 import com.example.music.app.Entity.User;
@@ -28,10 +29,19 @@ public class PlaylistService {
        return playlistRepository.findAll();
     }
 
-    public Playlist getById(long myid){
-        return playlistRepository.findById(myid).orElseThrow(()-> new UsernameNotFoundException("Playlist not found"));
+    public PlaylistResponseDTO getById(long myid){
+        Playlist play= playlistRepository.findById(myid).orElseThrow(()-> new UsernameNotFoundException("Playlist not found"));
+        PlaylistResponseDTO dto=new PlaylistResponseDTO();
+        dto.setId(play.getId());
+        dto.setName(play.getName());
+        dto.setSongs(play.getSongs());
+        return dto;
     }
 
+    public Playlist updateById(long id) {
+        return playlistRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Playlist not found"));
+    }
     public Playlist saveNewPlaylist(Playlist playlist, String username){
         User user=userRepository.findByUsername(username);
         playlist.setUser(user);

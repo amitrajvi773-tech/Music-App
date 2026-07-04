@@ -17,7 +17,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private PasswordEncoder passwordEncoder;
-     @GetMapping
+
+    @GetMapping
     public ResponseEntity<?> getUser(){
          Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
          String username=authentication.getName();

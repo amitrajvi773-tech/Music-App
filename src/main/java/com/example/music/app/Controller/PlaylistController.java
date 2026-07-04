@@ -1,5 +1,6 @@
 package com.example.music.app.Controller;
 
+import com.example.music.app.DTO.PlaylistResponseDTO;
 import com.example.music.app.Entity.Playlist;
 import com.example.music.app.Service.PlaylistService;
 import jakarta.persistence.EntityNotFoundException;
@@ -27,9 +28,9 @@ public class PlaylistController {
     }
 
     @GetMapping("playlist/{myid}")
-    public ResponseEntity<Playlist> getPlaylist(@PathVariable long myid){
+    public ResponseEntity<PlaylistResponseDTO> getPlaylist(@PathVariable long myid){
 
-        Playlist play=playlistService.getById(myid);
+        PlaylistResponseDTO play=playlistService.getById(myid);
         if(play==null){
             throw  new EntityNotFoundException("playlist entity not found");
         }
@@ -76,7 +77,7 @@ public class PlaylistController {
     public ResponseEntity<Playlist> update(@RequestBody Playlist playlist, @PathVariable long myid){
         Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
         String username=authentication.getName();
-        Playlist pl=playlistService.getById(myid);
+        Playlist pl=playlistService.updateById(myid);
         pl.setName(playlist.getName());
        return new ResponseEntity<>(playlistService.savePlaylist(pl,username), HttpStatus.OK);
 
