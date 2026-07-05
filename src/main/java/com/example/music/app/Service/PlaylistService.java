@@ -36,7 +36,7 @@ public class PlaylistService {
         dto.setName(play.getName());
         dto.setSongs(play.getSongs());
         return dto;
-    }
+    } 
 
     public Playlist updateById(long id) {
         return playlistRepository.findById(id)
