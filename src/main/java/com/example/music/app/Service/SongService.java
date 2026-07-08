@@ -68,10 +68,11 @@ public class SongService {
      return songRepository.findAll();
     }
 
-    public Page<Song> getSongsPage(int page,int size){
-        Pageable pageable= PageRequest.of(page,size);
+    public Page<Song> getSongsPage(int page,int size,String sortBy){
+        Pageable pageable= PageRequest.of(page,size,Sort.by(sortBy));
         return songRepository.findAll(pageable);
     }
 
+    public Page<Song> getSortedSongs(int page,int size,String sortBy){
 
-}
+    }

@@ -63,4 +63,9 @@ public class SongController {
     public ResponseEntity<Page<Song>> getSongsByPageing(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size ){
         return new ResponseEntity<>(songService.getSongsPage(page,size), HttpStatus.OK);
     }
+
+    @GetMapping("/songsorted")
+    public ResponseEntity<Page<Song>> getSortedSong(@RequestParam(defaultValue = "0") int value,@RequestParam(defaultValue = "5") int size,@RequestParam(defaultValue = "title") int sortBy,@RequestParam(defaultValue = "asc") String direction){
+        return ResponseEntity.ok(getSortedSongs(value,size,title,direction));
+    }
 }
