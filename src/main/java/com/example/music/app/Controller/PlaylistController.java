@@ -2,6 +2,8 @@ package com.example.music.app.Controller;
 
 import com.example.music.app.DTO.PlaylistResponseDTO;
 import com.example.music.app.Entity.Playlist;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import com.example.music.app.Service.PlaylistService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -16,11 +18,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/playlists")
+@Tag(name = "Playlist Controller", description = "Manage playlists")
 public class PlaylistController {
     @Autowired
     private PlaylistService playlistService;
 
     @GetMapping
+    @Operation(summary = "get all playlist")
     public List<Playlist> getPlaylists(){
 
         List<Playlist>  playlist=playlistService.getAllPlaylist();
@@ -28,9 +32,11 @@ public class PlaylistController {
     }
 
     @GetMapping("playlist/{myid}")
+    @Operation(summary = "get song by playlist")
     public ResponseEntity<PlaylistResponseDTO> getPlaylist(@PathVariable long myid){
-
-        PlaylistResponseDTO play=playlistService.getById(myid);
+        Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
+        String username=authentication.getName();
+        PlaylistResponseDTO play=playlistService.getById(myid,username);
         if(play==null){
             throw  new EntityNotFoundException("playlist entity not found");
         }
@@ -38,6 +44,7 @@ public class PlaylistController {
     }
 
     @PostMapping("addPlaylist")
+    @Operation(summary = "post playlist ")
     public ResponseEntity<Playlist> addPlaylist(@Valid @RequestBody Playlist playlist){
         Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
         String username=authentication.getName();
@@ -47,6 +54,7 @@ public class PlaylistController {
     }
 
     @PostMapping("/{playlistId}/songs/{songId}")
+    @Operation(summary = "post song by id ")
     public ResponseEntity<?> addSongInPlaylist(@Valid  @PathVariable Long playlistId, @PathVariable Long songId){
         Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
         String username=authentication.getName();
@@ -55,6 +63,7 @@ public class PlaylistController {
     }
 
     @DeleteMapping("/playlist/{myid}")
+    @Operation(summary = "post playlist ")
     public ResponseEntity<?> deletePl(@PathVariable long myid){
 
         Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
@@ -64,6 +73,7 @@ public class PlaylistController {
     }
 
     @DeleteMapping("/{playlistId}/song/{songId}")
+    @Operation(summary = "delete playlist ")
     public ResponseEntity<?> removeSongInPlaylist(@PathVariable Long playlistId, @PathVariable Long songId){
         Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
         String username=authentication.getName();
@@ -74,6 +84,7 @@ public class PlaylistController {
 
 
     @PutMapping("/playlists/{myid}")
+    @Operation(summary = "update  playlist ")
     public ResponseEntity<Playlist> update(@RequestBody Playlist playlist, @PathVariable long myid){
         Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
         String username=authentication.getName();

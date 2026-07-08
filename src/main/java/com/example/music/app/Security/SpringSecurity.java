@@ -17,6 +17,11 @@ public class SpringSecurity {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception {
         return http.authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html"
+                        ).permitAll()
                         .requestMatchers("/public/**").permitAll()
                         .requestMatchers("/user/**").authenticated()
                         .requestMatchers("/playlists/**").authenticated()

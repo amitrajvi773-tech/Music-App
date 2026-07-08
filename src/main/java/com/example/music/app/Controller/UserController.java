@@ -2,6 +2,7 @@ package com.example.music.app.Controller;
 
 import com.example.music.app.Entity.User;
 import com.example.music.app.Service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.persistence.EntityNotFoundException;
 
 @RestController
+@Tag(name = "User Controller" , description = "User Management")
 public class UserController {
     @Autowired
     private UserService userService;

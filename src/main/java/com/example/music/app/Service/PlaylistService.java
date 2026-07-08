@@ -29,8 +29,12 @@ public class PlaylistService {
        return playlistRepository.findAll();
     }
 
-    public PlaylistResponseDTO getById(long myid){
+    public PlaylistResponseDTO getById(long myid,String username){
+
         Playlist play= playlistRepository.findById(myid).orElseThrow(()-> new UsernameNotFoundException("Playlist not found"));
+        if(!play.getUser().getUsername().equals(username)){
+            throw new UsernameNotFoundException("user not is not valid ");
+        }
         PlaylistResponseDTO dto=new PlaylistResponseDTO();
         dto.setId(play.getId());
         dto.setName(play.getName());
