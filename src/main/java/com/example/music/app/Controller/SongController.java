@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,5 +57,10 @@ public class SongController {
     @Operation(summary = "search  a song")
     public ResponseEntity<List<Song>> searchSong(@RequestParam(required = false) String title,@RequestParam(required = false) String artist){
         return ResponseEntity.ok(songService.searchSongs(title,artist));
+    }
+
+    @GetMapping("/pagination")
+    public ResponseEntity<Page<Song>> getSongsByPageing(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size ){
+        return new ResponseEntity<>(songService.getSongsPage(page,size), HttpStatus.OK);
     }
 }
