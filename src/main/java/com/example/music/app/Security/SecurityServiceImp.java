@@ -1,10 +1,11 @@
-package com.example.music.app.Service;
+package com.example.music.app.Security;
 
 import com.example.music.app.Repository.UserRepository;
-import lombok.Data;
 import com.example.music.app.Entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,15 +24,17 @@ public class SecurityServiceImp implements UserDetailsService {
         if(user==null){
             throw new UsernameNotFoundException("user not found in loadUserByUsername");
         }
-        if (user!=null){
             return org.springframework.security.core.userdetails.User.builder().username(user.getUsername()).
                     password(user.getPassword())
                     .roles(user.getUserrole().toArray(new String[0])).
                      build();
-        }
+    }
+    @Bean
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration configuration)
+            throws Exception {
 
-        throw new UsernameNotFoundException("User not found"+username);
-
+        return configuration.getAuthenticationManager();
     }
 
 

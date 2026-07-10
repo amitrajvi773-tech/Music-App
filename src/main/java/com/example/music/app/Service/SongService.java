@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +30,7 @@ public class SongService {
 
 
     public SongResponseDTO findSongById(long id) {
-        Song song= songRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("entity not found "));
+        Song song = songRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("entity not found "));
         SongResponseDTO dto = new SongResponseDTO();
         dto.setId(song.getId());
         dto.setTitle(song.getTitle());
@@ -40,12 +41,12 @@ public class SongService {
         return dto;
     }
 
-    public Song updatedSave(long id){
-        Song song=songRepository.findById(id).orElseThrow(()->new EntityNotFoundException("entity not found "));
+    public Song updatedSave(long id) {
+        Song song = songRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("entity not found "));
         return songRepository.save(song);
     }
 
-    public void deleteSong(long id){
+    public void deleteSong(long id) {
 
         songRepository.deleteById(id);
     }
@@ -56,23 +57,31 @@ public class SongService {
     }
 
     public List<Song> searchSongs(String title, String artist) {
-    if(title != null && artist != null){
-     return songRepository.findByTitleContainingIgnoreCaseAndArtistContainingIgnoreCase(title,artist);
-     }
-     if(title!=null){
-      return songRepository.findByTitleContainingIgnoreCase(title);
-     }
-     if(artist!=null){
-         return songRepository.findByArtistContainingIgnoreCase(artist);
-     }
-     return songRepository.findAll();
+        if (title != null && artist != null) {
+            return songRepository.findByTitleContainingIgnoreCaseAndArtistContainingIgnoreCase(title, artist);
+        }
+        if (title != null) {
+            return songRepository.findByTitleContainingIgnoreCase(title);
+        }
+        if (artist != null) {
+            return songRepository.findByArtistContainingIgnoreCase(artist);
+        }
+        return songRepository.findAll();
     }
 
-    public Page<Song> getSongsPage(int page,int size,String sortBy){
-        Pageable pageable= PageRequest.of(page,size,Sort.by(sortBy));
+//    public Page<Song> getSongsPage(int page, int size, String sortBy) {
+//        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+//        return songRepository.findAll(pageable);
+//    }
+
+    public Page<Song> getSongs(int page, int size, String sortBy, String direction) {
+
+        Sort sort = direction.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
         return songRepository.findAll(pageable);
     }
-
-    public Page<Song> getSortedSongs(int page,int size,String sortBy){
-
-    }
+}

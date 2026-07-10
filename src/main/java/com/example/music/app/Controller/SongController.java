@@ -59,13 +59,13 @@ public class SongController {
         return ResponseEntity.ok(songService.searchSongs(title,artist));
     }
 
-    @GetMapping("/pagination")
-    public ResponseEntity<Page<Song>> getSongsByPageing(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size ){
-        return new ResponseEntity<>(songService.getSongsPage(page,size), HttpStatus.OK);
-    }
+//    @GetMapping("/pagination")
+//    public ResponseEntity<Page<Song>> getSongsByPageing(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size ){
+//        return new ResponseEntity<>(songService.getSongsPage(page,size), HttpStatus.OK);
+//    }
 
     @GetMapping("/songsorted")
-    public ResponseEntity<Page<Song>> getSortedSong(@RequestParam(defaultValue = "0") int value,@RequestParam(defaultValue = "5") int size,@RequestParam(defaultValue = "title") int sortBy,@RequestParam(defaultValue = "asc") String direction){
-        return ResponseEntity.ok(getSortedSongs(value,size,title,direction));
+    public ResponseEntity<Page<Song>> getSortedSong(@RequestParam(defaultValue = "0") int value,@RequestParam(defaultValue = "5") int size,@RequestParam(defaultValue = "title") String sortBy,@RequestParam(defaultValue = "asc") String direction){
+        return ResponseEntity.ok(songService.getSongs(value,size,sortBy,direction));
     }
 }
