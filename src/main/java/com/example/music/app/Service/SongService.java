@@ -14,8 +14,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.processing.Generated;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Service
@@ -41,9 +46,8 @@ public class SongService {
         return dto;
     }
 
-    public Song updatedSave(long id) {
-        Song song = songRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("entity not found "));
-        return songRepository.save(song);
+    public Song updatedSave(Song existing) {
+        return songRepository.save(existing);
     }
 
     public void deleteSong(long id) {
@@ -51,11 +55,26 @@ public class SongService {
         songRepository.deleteById(id);
     }
 
-    public Song saveSong(Song song) {
+    public Song saveSong(String title, String artist, String album, int duration, MultipartFile audioFile, MultipartFile imageFile) throws IOException {
+
+        String audioFileName = audioFile.getOriginalFilename();
+        Path audioPath = Paths.get("uploads/songs", audioFileName);
+        Files.copy(audioFile.getInputStream(), audioPath);
+
+        String imageFileName = imageFile.getOriginalFilename();
+        Path imagePath = Paths.get("uploads/images", imageFileName);
+        Files.copy(imageFile.getInputStream(), imagePath);
+
+        Song song = new Song();
+        song.setTitle(title);
+        song.setArtist(artist);
+        song.setAlbum(album);
+        song.setDuration(duration);
+        song.setAudioPath(audioPath.toString());
+        song.setImagePath(imagePath.toString());
 
         return songRepository.save(song);
     }
-
     public List<Song> searchSongs(String title, String artist) {
         if (title != null && artist != null) {
             return songRepository.findByTitleContainingIgnoreCaseAndArtistContainingIgnoreCase(title, artist);
@@ -69,10 +88,7 @@ public class SongService {
         return songRepository.findAll();
     }
 
-//    public Page<Song> getSongsPage(int page, int size, String sortBy) {
-//        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
-//        return songRepository.findAll(pageable);
-//    }
+
 
     public Page<Song> getSongs(int page, int size, String sortBy, String direction) {
 
@@ -84,4 +100,6 @@ public class SongService {
 
         return songRepository.findAll(pageable);
     }
+
+
 }

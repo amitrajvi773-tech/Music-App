@@ -25,6 +25,8 @@ public class Song {
     private String artist;
     private String album;
     private int duration;
+    private String audioPath;
+    private String imagePath;
 
     @ManyToMany(mappedBy = "songs")
     private List<Playlist> playlists=new ArrayList<>();

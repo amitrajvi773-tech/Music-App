@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/admin")
@@ -21,9 +21,22 @@ public class AdminController {
     private SongService songService;
 
     @PostMapping("/song")
-     public ResponseEntity<Song> addSong(@Valid  @RequestBody Song song) {
+    public ResponseEntity<Song> addSong(
+            @RequestParam String title,
+            @RequestParam String artist,
+            @RequestParam(required = false) String album,
+            @RequestParam int duration,
+            @RequestParam MultipartFile audioFile,
+            @RequestParam(required = false) MultipartFile imageFile) throws IOException {
 
-     Song saved = songService.saveSong(song);
+        Song saved = songService.saveSong(
+                title,
+                artist,
+                album,
+                duration,
+                audioFile,
+                imageFile
+        );
 
-    return ResponseEntity.status(HttpStatus.CREATED).body(saved);
-}}
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+    }}

@@ -2,10 +2,12 @@ package com.example.music.app.Controller;
 
 import com.example.music.app.DTO.SongResponseDTO;
 import com.example.music.app.Entity.Song;
+import com.example.music.app.Repository.SongRepository;
 import com.example.music.app.Service.SongService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,9 @@ import java.util.List;
 public class SongController {
     @Autowired
     private SongService songService;
+
+    @Autowired
+    private SongRepository songRepository;
 
     @GetMapping("/songs")
     @Operation(summary = "get all song")
@@ -45,12 +50,12 @@ public class SongController {
     @PutMapping("song/{myid}")
     @Operation(summary = "update a song")
     public Song update(@RequestBody Song song,@PathVariable long myid){
-        Song existing=songService.updatedSave(myid);
+        Song existing=songRepository.findById(myid).orElseThrow(()->new EntityNotFoundException("song not found"));
 
         existing.setTitle(song.getTitle());
         existing.setAlbum(song.getAlbum());
         existing.setArtist(song.getArtist());
-        return songService.saveSong(existing);
+        return songService.updatedSave(existing);
     }
 
     @GetMapping("/search")
@@ -59,10 +64,7 @@ public class SongController {
         return ResponseEntity.ok(songService.searchSongs(title,artist));
     }
 
-//    @GetMapping("/pagination")
-//    public ResponseEntity<Page<Song>> getSongsByPageing(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size ){
-//        return new ResponseEntity<>(songService.getSongsPage(page,size), HttpStatus.OK);
-//    }
+
 
     @GetMapping("/songsorted")
     public ResponseEntity<Page<Song>> getSortedSong(@RequestParam(defaultValue = "0") int value,@RequestParam(defaultValue = "5") int size,@RequestParam(defaultValue = "title") String sortBy,@RequestParam(defaultValue = "asc") String direction){
