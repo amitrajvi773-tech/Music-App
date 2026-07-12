@@ -45,6 +45,12 @@ public class UserService {
          userRepository.deleteById(myid);
 
     }
+
+    public UserResponseDTO findById(long id){
+        User user=  userRepository.findById(id).orElseThrow(()-> new UsernameNotFoundException("user not found"));
+       return convertToDTO(user);
+    }
+
     public User findByUsername(String username){
 
         return userRepository.findByUsername(username);

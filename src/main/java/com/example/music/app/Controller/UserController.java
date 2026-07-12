@@ -1,5 +1,6 @@
 package com.example.music.app.Controller;
 
+import com.example.music.app.DTO.UserResponseDTO;
 import com.example.music.app.Entity.User;
 import com.example.music.app.Service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,11 +21,9 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @GetMapping
-    public ResponseEntity<?> getUser(){
-         Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
-         String username=authentication.getName();
-         User user=userService.findByUsername(username);
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponseDTO> getUser(@PathVariable long id){
+         UserResponseDTO user=userService.findById(id);
          if (user == null) {
              throw new EntityNotFoundException("User not found");
          }
