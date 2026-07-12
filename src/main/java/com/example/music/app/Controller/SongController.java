@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/songs")
+@RequestMapping("/song")
 @Tag(name = "Song Controller", description = "Manage Playlist")
 public class SongController {
     @Autowired
@@ -28,10 +28,10 @@ public class SongController {
     @Autowired
     private SongRepository songRepository;
 
-    @GetMapping("/songs")
+    @GetMapping("/allsongs")
     @Operation(summary = "get all song")
-    public List<Song> getAllSong(){
-    List<Song> song = songService.allSong();
+    public List<SongResponseDTO> getAllSong(){
+    List<SongResponseDTO> song = songService.allSong();
     return song;
     }
 
@@ -68,7 +68,7 @@ public class SongController {
 
 
 
-    @GetMapping("/songsorted")
+    @GetMapping("/songs")
     public ResponseEntity<Page<Song>> getSortedSong(@RequestParam(defaultValue = "0") int value,@RequestParam(defaultValue = "5") int size,@RequestParam(defaultValue = "title") String sortBy,@RequestParam(defaultValue = "asc") String direction){
         return ResponseEntity.ok(songService.getSongs(value,size,sortBy,direction));
     }
@@ -77,6 +77,6 @@ public class SongController {
     public ResponseEntity<Resource> streamSong(@PathVariable long id) throws IOException {
         Resource resource=songService.streamSong(id);
 
-        return ResponseEntity.ok().contentType(MediaType.ALL).body(resource);
+        return ResponseEntity.ok().contentType(MediaType.parseMediaType("audio/mpeg")).body(resource);
     }
 }

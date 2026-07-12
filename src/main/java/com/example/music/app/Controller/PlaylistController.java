@@ -25,9 +25,9 @@ public class PlaylistController {
 
     @GetMapping
     @Operation(summary = "get all playlist")
-    public List<Playlist> getPlaylists(){
+    public List<PlaylistResponseDTO> getPlaylists(){
 
-        List<Playlist>  playlist=playlistService.getAllPlaylist();
+        List<PlaylistResponseDTO>  playlist=playlistService.getAllPlaylist();
         return playlist;
     }
 

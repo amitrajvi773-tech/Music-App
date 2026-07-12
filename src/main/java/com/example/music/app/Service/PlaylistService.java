@@ -9,10 +9,13 @@ import com.example.music.app.Repository.SongRepository;
 import com.example.music.app.Repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static org.antlr.v4.runtime.tree.xpath.XPath.findAll;
 
 @Service
 public class PlaylistService {
@@ -25,8 +28,9 @@ public class PlaylistService {
     @Autowired
     private SongRepository songRepository;
 
-    public List<Playlist> getAllPlaylist(){
-       return playlistRepository.findAll();
+    public List<PlaylistResponseDTO> getAllPlaylist(){
+
+       return playlistRepository.findAll().stream().map(this::convertIntoDTO).toList();
     }
 
     public PlaylistResponseDTO getById(long myid,String username){
@@ -35,16 +39,13 @@ public class PlaylistService {
         if(!play.getUser().getUsername().equals(username)){
             throw new UsernameNotFoundException("user not is not valid ");
         }
-        PlaylistResponseDTO dto=new PlaylistResponseDTO();
-        dto.setId(play.getId());
-        dto.setName(play.getName());
-        dto.setSongs(play.getSongs());
-        return dto;
+       return convertIntoDTO(play);
     } 
 
     public Playlist updateById(long id) {
-        return playlistRepository.findById(id)
+        Playlist play= playlistRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Playlist not found"));
+        return play;
     }
     public Playlist saveNewPlaylist(Playlist playlist, String username){
         User user=userRepository.findByUsername(username);
@@ -52,20 +53,19 @@ public class PlaylistService {
         return playlistRepository.save(playlist);
     }
 
-    public Playlist savePlaylist(Playlist playlist,String username){
+    public Playlist savePlaylist(Playlist playlist, String username){
         if(!playlist.getUser().getUsername().equals(username)){
             throw new UsernameNotFoundException("user not is not valid ");
         }
+
         return playlistRepository.save(playlist);
 
     }
-
-
     public void deletePlaylist(long id,String username){
- Playlist playlist=playlistRepository.findById(id).orElseThrow(()->new UsernameNotFoundException("playlist not found"));
- if(!playlist.getUser().getUsername().equals(username)){
-     throw new UsernameNotFoundException("username not found ");
- }
+     Playlist playlist=playlistRepository.findById(id).orElseThrow(()->new UsernameNotFoundException("playlist not found"));
+     if(!playlist.getUser().getUsername().equals(username)){
+     throw new AccessDeniedException("access denied ");
+     }
         playlistRepository.deleteById(playlist.getId());
     }
 
@@ -98,6 +98,14 @@ public class PlaylistService {
         playlist.getSongs().add(song);
         playlistRepository.save(playlist);
 
+    }
+
+    public PlaylistResponseDTO convertIntoDTO(Playlist play){
+        PlaylistResponseDTO dto=new PlaylistResponseDTO();
+        dto.setId(play.getId());
+        dto.setName(play.getName());
+        dto.setSongs(play.getSongs());
+        return dto;
     }
 }
 

@@ -26,8 +26,9 @@ public class SongService {
     @Autowired
     private SongRepository songRepository;
 
-    public List<Song> allSong() {
-        return songRepository.findAll();
+    public List<SongResponseDTO> allSong() {
+        return songRepository.findAll().stream().map(this::convertToDTO).toList();
+
 
     }
 
@@ -45,6 +46,7 @@ public class SongService {
     }
 
     public Song updatedSave(Song existing) {
+
         return songRepository.save(existing);
     }
 
@@ -73,6 +75,7 @@ public class SongService {
 
         return songRepository.save(song);
     }
+
     public List<Song> searchSongs(String title, String artist) {
         if (title != null && artist != null) {
             return songRepository.findByTitleContainingIgnoreCaseAndArtistContainingIgnoreCase(title, artist);
@@ -108,5 +111,17 @@ public class SongService {
 
         return new UrlResource(path.toUri());
 
+    }
+    private SongResponseDTO convertToDTO(Song song) {
+
+        SongResponseDTO dto = new SongResponseDTO();
+
+        dto.setId(song.getId());
+        dto.setTitle(song.getTitle());
+        dto.setArtist(song.getArtist());
+        dto.setAlbum(song.getAlbum());
+        dto.setDuration(song.getDuration());
+
+        return dto;
     }
 }

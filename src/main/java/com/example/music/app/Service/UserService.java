@@ -1,5 +1,6 @@
 package com.example.music.app.Service;
 
+import com.example.music.app.DTO.UserResponseDTO;
 import com.example.music.app.Entity.User;
 import com.example.music.app.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,5 +48,11 @@ public class UserService {
     public User findByUsername(String username){
 
         return userRepository.findByUsername(username);
+    }
+    private UserResponseDTO convertToDTO(User user) {
+        UserResponseDTO dto = new UserResponseDTO();
+        dto.setUsername(user.getUsername());
+        dto.setEmail(user.getEmail());
+        return dto;
     }
 }
