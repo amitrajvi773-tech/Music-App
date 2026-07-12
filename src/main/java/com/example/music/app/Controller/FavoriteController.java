@@ -1,5 +1,6 @@
 package com.example.music.app.Controller;
 
+import com.example.music.app.DTO.FavoriteResponseDTO;
 import com.example.music.app.Entity.Song;
 import com.example.music.app.Entity.User;
 import com.example.music.app.Repository.FavoriteRepository;
@@ -13,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/favorites")
@@ -33,7 +36,7 @@ public class FavoriteController {
  }
 
  @GetMapping
-    public ResponseEntity<?> getFavorite(){
+    public ResponseEntity<List<FavoriteResponseDTO>> getFavorite(){
      Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
      String username=authentication.getName();
      return ResponseEntity.ok(favoriteService.getFavorites(username));

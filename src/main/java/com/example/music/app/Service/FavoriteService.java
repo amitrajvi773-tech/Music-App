@@ -1,5 +1,6 @@
 package com.example.music.app.Service;
 
+import com.example.music.app.DTO.FavoriteResponseDTO;
 import com.example.music.app.Entity.Favorite;
 import com.example.music.app.Entity.Song;
 import com.example.music.app.Entity.User;
@@ -38,12 +39,12 @@ private FavoriteRepository favoriteRepository;
     }
 
 
-    public List<Favorite> getFavorites(String username) {
+    public List<FavoriteResponseDTO> getFavorites(String username) {
         User user=userRepository.findByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
         }
-        List<Favorite> liked=user.getFavorites();
+        List<FavoriteResponseDTO> liked=user.getFavorites().stream().map(this::convertToDTO).toList();
         return liked;
 
     }
@@ -57,7 +58,15 @@ private FavoriteRepository favoriteRepository;
         if (favorite == null) {
             throw new EntityNotFoundException("Favorite not found");
         }
-
         favoriteRepository.delete(favorite);
+    }
+
+    private FavoriteResponseDTO convertToDTO(Favorite favorite) {
+        FavoriteResponseDTO dto = new FavoriteResponseDTO();
+
+        dto.setUser(favorite.getUser().getUsername());
+        dto.setSong(favorite.getSong().getTitle());
+
+        return dto;
     }
 }
