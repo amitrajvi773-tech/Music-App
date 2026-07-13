@@ -52,9 +52,7 @@ public class UserController {
          }
          update.setEmail(user.getEmail());
          update.setUsername(user.getUsername());
-        if (user.getPassword() != null && !user.getPassword().isBlank()) {
-            update.setPassword(passwordEncoder.encode(user.getPassword()));
-        }
+         update.setPassword(user.getPassword());
          return userService.saveUser(update);
 
     }

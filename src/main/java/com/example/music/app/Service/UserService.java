@@ -36,7 +36,9 @@ public class UserService {
 
     }
     public User saveUser(User updated){
-        updated.setPassword(passwordEncoder.encode(updated.getPassword()));
+        if (updated.getPassword() != null && !updated.getPassword().isBlank()) {
+            updated.setPassword(passwordEncoder.encode(updated.getPassword()));
+        }
         return userRepository.save(updated);
     }
 
