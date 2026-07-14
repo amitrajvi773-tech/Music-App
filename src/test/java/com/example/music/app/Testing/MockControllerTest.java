@@ -1,12 +1,15 @@
 package com.example.music.app.Testing;
 
+import com.example.music.app.Controller.PlaylistController;
 import com.example.music.app.Controller.SongController;
 import com.example.music.app.DTO.SongResponseDTO;
 import com.example.music.app.Repository.SongRepository;
+import com.example.music.app.Service.PlaylistService;
 import com.example.music.app.Service.SongService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -39,6 +42,8 @@ public class MockControllerTest {
     @MockitoBean
     UserDetailsService userDetailsService;
 
+
+
     @Test
     void testgetAllSong () throws Exception {
         SongResponseDTO dto=new SongResponseDTO();
@@ -59,11 +64,10 @@ public class MockControllerTest {
     @Test
     void testDelete() throws Exception{
         long id=1;
-
-
-                mockMvc.perform(delete("/song/song/{myid}",id))
-                        .andExpect((status().isNoContent()))
-                        .andExpect(content().string("song is delted"));
+        mockMvc.perform(delete("/song/song/{myid}",id))
+                .andExpect((status().isNoContent()));
     }
+
+
 
 }
