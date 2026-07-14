@@ -1,12 +1,9 @@
 package com.example.music.app.Security;
 
 import com.example.music.app.JWT.JwtFilter;
-import com.example.music.app.JWT.JwtUtilis;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.web.config.EnableSpringDataWebSupport;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
