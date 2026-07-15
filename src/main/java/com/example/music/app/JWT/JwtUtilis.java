@@ -26,7 +26,7 @@ public class JwtUtilis {
      return Jwts.builder()
          .subject(username)
          .issuedAt(new Date())
-         .expiration(new Date(System.currentTimeMillis()+ 1000 * 60 * 60))
+         .expiration(new Date(System.currentTimeMillis()+ 1000 * 60 * 280))
          .signWith(key, SignatureAlgorithm.HS256)
          .compact();
     }

@@ -6,6 +6,5 @@ import lombok.Data;
 public class UserResponseDTO {
     String username;
     String email;
-    String password;
 
 }
