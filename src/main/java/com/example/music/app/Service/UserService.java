@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -62,5 +63,10 @@ public class UserService {
         dto.setUsername(user.getUsername());
         dto.setEmail(user.getEmail());
         return dto;
+    }
+
+    public List<UserResponseDTO> AllUser() {
+        List<UserResponseDTO> list=userRepository.findAll().stream().map(this::convertToDTO).toList();
+        return list;
     }
 }

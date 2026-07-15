@@ -4,14 +4,15 @@ import com.example.music.app.Entity.User;
 import com.example.music.app.JWT.JwtUtilis;
 import com.example.music.app.Service.UserService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class IntegrationServiceTest {
 @Autowired
     JwtUtilis jwtUtilis;

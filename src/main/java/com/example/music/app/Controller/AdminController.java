@@ -1,5 +1,6 @@
 package com.example.music.app.Controller;
 
+import com.example.music.app.DTO.UserResponseDTO;
 import com.example.music.app.Entity.Song;
 import com.example.music.app.Entity.User;
 import com.example.music.app.Service.SongService;
@@ -13,12 +14,16 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
     @Autowired
     private SongService songService;
+
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/song")
     public ResponseEntity<Song> addSong(
@@ -39,4 +44,12 @@ public class AdminController {
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
-    }}
+    }
+
+    @GetMapping("alluser")
+    public ResponseEntity<List<UserResponseDTO>> getAllUser(){
+        List<UserResponseDTO> user=userService.AllUser();
+        return ResponseEntity.ok().body(user);
+    }
+}
+

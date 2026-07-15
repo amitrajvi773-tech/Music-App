@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import jakarta.persistence.EntityNotFoundException;
 
-@RestController
+@RestController("user")
 @Tag(name = "User Controller" , description = "User Management")
 public class UserController {
     @Autowired
